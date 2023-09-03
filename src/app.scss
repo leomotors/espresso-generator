@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.input {
+  @apply rounded border border-black p-1 text-center;
+}
+
+th,
+td {
+  @apply border border-black p-1 text-center;
+}
