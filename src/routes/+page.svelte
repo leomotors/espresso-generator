@@ -80,7 +80,7 @@
     <label for="input-type">Input Type</label>
     <select id="input-type" class="input" bind:value={inputType}>
       <option value="input-output">Input to Output</option>
-      <option value="output-input">Output to Input</option>
+      <option value="output-input" disabled>Output to Input</option>
     </select>
   </div>
 
