@@ -4,12 +4,12 @@
   "private": true,
   "packageManager": "pnpm@8.7.1",
   "scripts": {
-    "dev": "vite dev",
+    "dev": "vite dev --port=5204",
     "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "test": "vitest",
+    "test": "vitest --run",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write ."
   },
