@@ -3,6 +3,7 @@
 
   export let bitsOutput: number;
 
+  export let oiData = {} as Record<string, string>;
   $: oiData = generateOI(bitsOutput);
 </script>
 

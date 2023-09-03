@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { generateFullEspresso, ioToEspresso } from "$lib/espresso/toEspresso";
   import IO from "./IO.svelte";
   import OI from "./OI.svelte";
 
@@ -6,6 +7,40 @@
 
   let bitsInput = 1;
   let bitsOutput = 1;
+
+  let ioData = {} as Record<string, string>;
+  let oiData = {} as Record<string, string>;
+
+  let errors = "";
+  let inputRaw = "";
+  let outputRaw = "";
+  let outputBits = {} as Record<string, string[]>;
+  let outputText = "";
+
+  async function getCoffee() {
+    const espressoData =
+      inputType === "input-output"
+        ? ioToEspresso(ioData, bitsOutput)
+        : ioToEspresso(ioData, bitsOutput);
+
+    const espresso = generateFullEspresso(espressoData);
+
+    const res = await fetch("/", {
+      method: "POST",
+      body: JSON.stringify({ input: espresso }),
+    });
+
+    if (res.ok) {
+      const { raw, bits, text } = await res.json();
+
+      inputRaw = espresso;
+      outputRaw = raw;
+      outputBits = bits;
+      outputText = text;
+    } else {
+      errors = await res.text();
+    }
+  }
 </script>
 
 <main class="flex flex-col items-center gap-4 p-8">
@@ -46,8 +81,36 @@
   </div>
 
   {#if inputType === "input-output"}
-    <IO {bitsInput} />
+    <IO {bitsInput} bind:ioData />
   {:else}
-    <OI {bitsOutput} />
+    <OI {bitsOutput} bind:oiData />
   {/if}
+
+  <button on:click={getCoffee}>Get Coffee</button>
+
+  <p class="text-red text-2xl">{errors}</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Input</th>
+        <th>Output</th>
+        <th>Bits</th>
+        <th>Formula</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr class="whitespace-pre-line text-start">
+        <td>{inputRaw}</td>
+        <td>{outputRaw}</td>
+        <td
+          >{Object.entries(outputBits)
+            .map(([key, val]) => `${key} = ${val.join(", ")}`)
+            .join("\n")}</td
+        >
+        <td>{outputText}</td>
+      </tr>
+    </tbody>
+  </table>
 </main>

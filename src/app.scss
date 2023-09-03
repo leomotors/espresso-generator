@@ -2,11 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  @apply text-center;
+}
+
 .input {
-  @apply rounded border border-black p-1 text-center;
+  @apply rounded border border-black p-1;
 }
 
 th,
 td {
-  @apply border border-black p-1 text-center;
+  @apply border border-black p-1;
 }

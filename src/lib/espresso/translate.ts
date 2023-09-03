@@ -50,7 +50,7 @@ export function translate(text: string) {
     .join("\n");
 
   return {
-    raw: lines.slice(5, lines.length - 1).join("\n"),
+    raw: text,
     bits: outputCircuit,
     text: outputText,
   };
