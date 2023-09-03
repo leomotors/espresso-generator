@@ -55,3 +55,23 @@ export function translate(text: string) {
     text: outputText,
   };
 }
+
+export function translateMultiple(texts: string[]) {
+  const translated = texts.map(translate);
+
+  return {
+    raw: translated
+      .map((t) => t.raw)
+      .map((r, index) =>
+        r.replace(".ob a", ".ob " + String.fromCharCode(97 + index)),
+      )
+      .join("\n\n"),
+    bits: translated
+      .map((t) => Object.values(t.bits))
+      .reduce((prev, curr, index) => ({ ...prev, [index]: curr }), {}),
+    text: translated
+      .map((t) => t.text)
+      .map((t, index) => t.replace("a", String.fromCharCode(97 + index)))
+      .join("\n"),
+  };
+}

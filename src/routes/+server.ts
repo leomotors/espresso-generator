@@ -1,13 +1,27 @@
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { exec } from "$lib/server/exec";
-import { translate } from "$lib/espresso/translate";
+import { translate, translateMultiple } from "$lib/espresso/translate";
+import { optimize } from "$lib/espresso/optimize";
 
 const espressoPath = process.env.ESPRESSO_PATH ?? "espresso-ubuntu";
 
 export const POST = (async ({ request }) => {
-  const { input } = await request.json();
+  const { input, useOptimization } = await request.json();
 
-  const { stdout } = await exec(`echo "${input}" | espresso/${espressoPath}`);
+  if (!useOptimization) {
+    const { stdout } = await exec(`echo "${input}" | espresso/${espressoPath}`);
+    return json(translate(stdout));
+  } else {
+    const inputs = optimize(input);
 
-  return json(translate(stdout));
+    const outputs = (
+      await Promise.all(
+        inputs.map((input) =>
+          exec(`echo "${input}" | espresso/${espressoPath}`),
+        ),
+      )
+    ).map((o) => o.stdout);
+
+    return json(translateMultiple(outputs));
+  }
 }) satisfies RequestHandler;

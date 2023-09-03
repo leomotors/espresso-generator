@@ -7,6 +7,7 @@
 
   let bitsInput = 1;
   let bitsOutput = 1;
+  let useOptimization = false;
 
   let ioData = {} as Record<string, string>;
   let oiData = {} as Record<string, string>;
@@ -27,7 +28,10 @@
 
     const res = await fetch("/", {
       method: "POST",
-      body: JSON.stringify({ input: espresso }),
+      body: JSON.stringify({
+        input: espresso,
+        useOptimization,
+      }),
     });
 
     if (res.ok) {
@@ -85,6 +89,15 @@
   {:else}
     <OI {bitsOutput} bind:oiData />
   {/if}
+
+  <div>
+    <input
+      id="use-optimization"
+      type="checkbox"
+      bind:checked={useOptimization}
+    />
+    <label for="use-optimization">Use Optimization</label>
+  </div>
 
   <button on:click={getCoffee}>Get Coffee</button>
 
