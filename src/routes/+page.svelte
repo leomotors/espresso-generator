@@ -17,6 +17,7 @@
   let outputRaw = "";
   let outputBits = {} as Record<string, string[]>;
   let outputText = "";
+  let complexityText = "";
 
   async function getCoffee() {
     const espressoData =
@@ -33,12 +34,13 @@
     });
 
     if (res.ok) {
-      const { input, raw, bits, text } = await res.json();
+      const { input, raw, bits, text, complexity } = await res.json();
 
       inputRaw = input;
       outputRaw = raw;
       outputBits = bits;
       outputText = text;
+      complexityText = `OR: ${complexity.orGates}\nAND: ${complexity.andGates}\nWires: ${complexity.wires}`;
     } else {
       errors = await res.text();
     }
@@ -118,6 +120,7 @@
         <th>Output</th>
         <th>Bits</th>
         <th>Formula</th>
+        <th>Complexity</th>
       </tr>
     </thead>
 
@@ -131,6 +134,7 @@
             .join("\n")}</td
         >
         <td>{outputText}</td>
+        <td>{complexityText}</td>
       </tr>
     </tbody>
   </table>

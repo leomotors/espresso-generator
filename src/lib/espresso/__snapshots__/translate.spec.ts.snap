@@ -47,6 +47,11 @@ exports[`translate > 7 segment 1`] = `
       "-101",
     ],
   },
+  "complexity": {
+    "andGates": 25,
+    "orGates": 7,
+    "wires": 91,
+  },
   "raw": ".i 4
 .o 7
 .ilb A B C D

@@ -38,6 +38,31 @@ export function translate(text: string) {
     }
   }
 
+  // Each output use 1 OR Gate if there is more than 1 terms
+  const orGates = Object.values(outputCircuit).filter(
+    (term) => term.length > 1,
+  ).length;
+
+  // Each term use AND Gate if input size more than 1
+  const andGates = Object.values(outputCircuit)
+    .map((terms) =>
+      terms
+        .map((t) => t.replaceAll("-", "").length)
+        .reduce((prev, curr) => prev + (curr > 1 ? 1 : 0), 0),
+    )
+    .reduce((prev, curr) => prev + curr, 0);
+
+  const wires =
+    Object.values(outputCircuit)
+      .map((terms) =>
+        terms
+          .map((term) => term.replaceAll("-", "").length)
+          .reduce((prev, curr) => prev + curr, 0),
+      )
+      .reduce((prev, curr) => prev + curr, 0) +
+    andGates +
+    orGates;
+
   const outputText = Object.entries(outputCircuit)
     .map(
       ([key, value]) =>
@@ -53,6 +78,11 @@ export function translate(text: string) {
     raw: text,
     bits: outputCircuit,
     text: outputText,
+    complexity: {
+      orGates,
+      andGates,
+      wires,
+    },
   };
 }
 
@@ -73,5 +103,15 @@ export function translateMultiple(texts: string[]) {
       .map((t) => t.text)
       .map((t, index) => t.replace("a", String.fromCharCode(97 + index)))
       .join("\n"),
+    complexity: translated
+      .map((t) => t.complexity)
+      .reduce(
+        (prev, curr) => ({
+          orGates: prev.orGates + curr.orGates,
+          andGates: prev.andGates + curr.andGates,
+          wires: prev.wires + curr.wires,
+        }),
+        { orGates: 0, andGates: 0, wires: 0 },
+      ),
   };
 }
