@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { generateFullEspresso, ioToEspresso } from "$lib/espresso/toEspresso";
+  import { ioToEspresso } from "$lib/espresso/toEspresso";
   import IO from "./IO.svelte";
   import OI from "./OI.svelte";
 
@@ -24,20 +24,18 @@
         ? ioToEspresso(ioData, bitsOutput)
         : ioToEspresso(ioData, bitsOutput);
 
-    const espresso = generateFullEspresso(espressoData);
-
     const res = await fetch("/", {
       method: "POST",
       body: JSON.stringify({
-        input: espresso,
+        data: espressoData,
         useOptimization,
       }),
     });
 
     if (res.ok) {
-      const { raw, bits, text } = await res.json();
+      const { input, raw, bits, text } = await res.json();
 
-      inputRaw = espresso;
+      inputRaw = input;
       outputRaw = raw;
       outputBits = bits;
       outputText = text;

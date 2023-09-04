@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 function bitsORabcdToBits(bitsORabcd: string, bitsOutput: number) {
   if (bitsORabcd === "-" || !bitsORabcd) {
     return "-".repeat(bitsOutput);
@@ -23,7 +25,13 @@ export function ioToEspresso(
     .map(([key, value]) => [key, bitsORabcdToBits(value, bitsOutput)]);
 }
 
+const EspressoSchema = z.array(
+  z.tuple([z.string().regex(/^[01]+$/), z.string().regex(/^[01-]+$/)]),
+);
+
 export function generateFullEspresso(data: [string, string][]) {
+  EspressoSchema.parse(data);
+
   const bitsInput = data[0][0].length;
   const bitsOutput = data[0][1].length;
 
