@@ -50,6 +50,16 @@
 <main class="flex flex-col items-center gap-4 p-8">
   <h1 class="text-3xl font-bold">☕️ Espresso Generator</h1>
 
+  <p>
+    <a
+      href="https://github.com/Leomotors/espresso-generator"
+      target="_blank"
+      rel="noreferrer"
+    >
+      GitHub Link
+    </a>
+  </p>
+
   <div class="flex gap-4">
     <div>
       <label for="bits-input">Bits Input</label>
