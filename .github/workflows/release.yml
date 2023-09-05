@@ -47,6 +47,6 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: ghcr.io/leomotors/espresso-generator:${{ github.ref }}
+          tags: ghcr.io/leomotors/espresso-generator:${{ github.ref_name }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
