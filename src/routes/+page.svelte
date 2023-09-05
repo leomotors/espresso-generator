@@ -25,7 +25,7 @@
         ? ioToEspresso(ioData, bitsOutput)
         : ioToEspresso(ioData, bitsOutput);
 
-    const res = await fetch("/", {
+    const res = await fetch("/api", {
       method: "POST",
       body: JSON.stringify({
         data: espressoData,
