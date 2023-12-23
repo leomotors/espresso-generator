@@ -4,7 +4,12 @@ import { translate, translateMultiple } from "$lib/espresso/translate";
 import { optimize } from "$lib/espresso/optimize";
 import { generateFullEspresso } from "$lib/espresso/toEspresso";
 
-const espressoPath = process.env.ESPRESSO_PATH ?? "espresso-ubuntu";
+const espressoPath =
+  (process.arch === "x64"
+    ? process.env.ESPRESSO_PATH_AMD64
+    : process.arch === "arm64"
+      ? process.env.ESPRESSO_PATH_ARM64
+      : undefined) || "espresso-ubuntu";
 
 export const POST = (async ({ request }) => {
   const { data, useOptimization } = await request.json();

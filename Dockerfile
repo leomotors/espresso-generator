@@ -2,7 +2,7 @@
 # ? Builder: Build the App
 # ? -------------------------
 
-FROM node:18-alpine as builder
+FROM node:20-alpine as builder
 
 WORKDIR /app
 
@@ -25,7 +25,7 @@ RUN npx pnpm build
 # ? Runner: Production to run
 # ? -------------------------
 
-FROM node:18-alpine as runner
+FROM node:20-alpine as runner
 
 LABEL name "espresso-generator"
 
@@ -38,11 +38,13 @@ ENV NODE_ENV production
 COPY --chown=node:node --from=builder /app/build ./build
 COPY --chown=node:node --from=builder /app/package.json ./package.json
 COPY espresso/espresso-alpine-amd64 ./espresso/espresso-alpine-amd64
+COPY espresso/espresso-alpine-arm64 ./espresso/espresso-alpine-arm64
 
 ENV HOST=0.0.0.0
 ENV ORIGIN=https://espresso.leomotors.me
 ENV PORT=5204
-ENV ESPRESSO_PATH=espresso-alpine-amd64
+ENV ESPRESSO_PATH_AMD64=espresso-alpine-amd64
+ENV ESPRESSO_PATH_ARM64=espresso-alpine-arm64
 
 EXPOSE 5204
 
